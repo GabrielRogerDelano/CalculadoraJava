@@ -14,7 +14,10 @@ public class Memoria {
 	private final List<MemoriaObservador> observadores =
 			new ArrayList<>();
 	
+	private TipoComando ultimaOperacao = null;
+	private boolean substituir = false;
 	private String textoAtual = "";
+	private String textoBuffer = "";
 	
 	
 	private Memoria() {
@@ -36,14 +39,54 @@ public class Memoria {
 	public void processarComando(String texto) {
 		
 		TipoComando tipoComando = detectarTipoComando(texto);
-		System.out.println(tipoComando);
-		if("AC".equals(texto)) {
+		//System.out.println(tipoComando);
+		if(tipoComando == null) {
+			return;
+		}else if (tipoComando == TipoComando.ZERAR) {
 			textoAtual = "";
+			textoBuffer = "";
+			substituir = false;
+			ultimaOperacao = null;
+		}else if (tipoComando == TipoComando.NUMERO || 
+				tipoComando == TipoComando.VIRGULA) {
+			textoAtual = substituir ? texto : textoAtual+texto;
+			substituir = false;
 		}else {
-			textoAtual += texto;	
+			substituir = true;
+			textoAtual = obterResultadoOperacao();
+			textoBuffer = textoAtual;
+			ultimaOperacao = tipoComando;
+		}
+
+		observadores.forEach(o -> o.valorAlterado(getTextoAtual()));
+	}
+
+	private String obterResultadoOperacao() {
+		if(ultimaOperacao == null || ultimaOperacao == TipoComando.IGUAL) {
+			return textoAtual;
 		}
 		
-		observadores.forEach(o -> o.valorAlterado(getTextoAtual()));
+		double numeroBuffer = Double.parseDouble(
+				textoBuffer.replace(",", "."));
+		double numeroAtual = Double.parseDouble(
+				textoAtual.replace(",", "."));
+		
+		double resultado = 0;
+		
+		if(ultimaOperacao == TipoComando.SOMA) {
+			resultado = numeroBuffer + numeroAtual;
+		}else if(ultimaOperacao == TipoComando.SUB) {
+			resultado = numeroBuffer - numeroAtual;
+		}else if(ultimaOperacao == TipoComando.MULT) {
+			resultado = numeroBuffer * numeroAtual;
+		}else if(ultimaOperacao == TipoComando.DIV) {
+			resultado = numeroBuffer / numeroAtual;
+		}
+				
+		String resultadoString = Double.toString(resultado).replace(".", ",");
+		boolean inteiro = resultadoString.endsWith(",0");
+		
+		return inteiro ? resultadoString.replace(",0", "") : resultadoString;
 	}
 
 	private TipoComando detectarTipoComando(String texto) {
@@ -67,7 +110,8 @@ public class Memoria {
 				return TipoComando.SOMA;
 			}else if("=".equals(texto)) {
 				return TipoComando.IGUAL;
-			}else if(",".equals(texto)) {
+			}else if(",".equals(texto) &&
+					!textoAtual.contains(",")) {
 				return TipoComando.VIRGULA;
 			}
 		}
