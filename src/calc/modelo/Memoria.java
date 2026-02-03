@@ -6,7 +6,7 @@ import java.util.List;
 public class Memoria {
 	
 	private enum TipoComando{
-		ZERAR, NUMERO, DIV, MULT, SUB, SOMA, IGUAL, VIRGULA;
+		INVERTER, APAGAR_ULTIMO, ZERAR_ATUAL, ZERAR_TUDO, NUMERO, DIV, MULT, SUB, SOMA, IGUAL, RESTO, VIRGULA;
 	};
 	
 	private static final Memoria instancia = new Memoria();
@@ -24,9 +24,15 @@ public class Memoria {
 		
 	}
 	
+	public String getTextoBuffer() {
+		return textoBuffer;
+	}
+
 	public static Memoria getInstancia() {
 		return instancia;
 	}
+
+
 	
 	public void adicionarObservador(MemoriaObservador observador) {
 		observadores.add(observador);
@@ -42,7 +48,7 @@ public class Memoria {
 		//System.out.println(tipoComando);
 		if(tipoComando == null) {
 			return;
-		}else if (tipoComando == TipoComando.ZERAR) {
+		}else if (tipoComando == TipoComando.ZERAR_TUDO) {
 			textoAtual = "";
 			textoBuffer = "";
 			substituir = false;
@@ -98,8 +104,16 @@ public class Memoria {
 			Integer.parseInt(texto);
 			return TipoComando.NUMERO;
 		} catch (NumberFormatException e) {
-			if("AC".equals(texto)) {
-				return TipoComando.ZERAR;
+			if("⌫".equals(texto)) {
+				return TipoComando.APAGAR_ULTIMO;
+			}else if("CE".equals(texto)) {
+				return TipoComando.ZERAR_ATUAL;
+			}else if("C".equals(texto)) {
+				return TipoComando.ZERAR_TUDO;
+			}else if("%".equals(texto)) {
+				return TipoComando.RESTO;
+			}else if("+/-".equals(texto)) {
+				return TipoComando.INVERTER;
 			}else if("/".equals(texto)) {
 				return TipoComando.DIV;
 			}else if("*".equals(texto)) {
