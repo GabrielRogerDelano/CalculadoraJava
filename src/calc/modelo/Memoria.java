@@ -18,7 +18,7 @@ public class Memoria {
 	private boolean substituir = false;
 	private String textoAtual = "";
 	private String textoBuffer = "";
-	
+	private String textoBufferDisplay = "";
 	
 	private Memoria() {
 		
@@ -31,8 +31,6 @@ public class Memoria {
 	public static Memoria getInstancia() {
 		return instancia;
 	}
-
-
 	
 	public void adicionarObservador(MemoriaObservador observador) {
 		observadores.add(observador);
@@ -45,7 +43,7 @@ public class Memoria {
 	public void processarComando(String texto) {
 		
 		TipoComando tipoComando = detectarTipoComando(texto);
-		//System.out.println(tipoComando);
+		
 		if(tipoComando == null) {
 			return;
 		}else if (tipoComando == TipoComando.ZERAR_TUDO) {
@@ -61,6 +59,7 @@ public class Memoria {
 			substituir = true;
 			textoAtual = obterResultadoOperacao();
 			textoBuffer = textoAtual;
+			textoBufferDisplay = textoAtual + texto;
 			ultimaOperacao = tipoComando;
 		}
 
@@ -114,7 +113,7 @@ public class Memoria {
 				return TipoComando.RESTO;
 			}else if("+/-".equals(texto)) {
 				return TipoComando.INVERTER;
-			}else if("/".equals(texto)) {
+			}else if("÷".equals(texto)) {
 				return TipoComando.DIV;
 			}else if("*".equals(texto)) {
 				return TipoComando.MULT;
@@ -130,6 +129,10 @@ public class Memoria {
 			}
 		}
 		return null;
+	}
+
+	public String getTextoBufferDisplay() {
+		return textoBufferDisplay;
 	}
 }
 

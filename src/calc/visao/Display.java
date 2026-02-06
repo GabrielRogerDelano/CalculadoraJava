@@ -45,6 +45,8 @@ public class Display extends JPanel implements MemoriaObservador {
     @Override
     public void valorAlterado(String novoValor) {
     	labelAtual.setText(novoValor);
-    	labelBuffer.setText(Memoria.getInstancia().getTextoBuffer() );
+    	labelBuffer.setText(Memoria.getInstancia().getTextoBufferDisplay() );
     }
+    
+    
 }

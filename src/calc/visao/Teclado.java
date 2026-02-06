@@ -91,7 +91,7 @@ public class Teclado extends JPanel implements ActionListener {
 		if(e.getSource() instanceof JButton) {
 			JButton botao = (JButton) e.getSource();
 			Memoria.getInstancia().processarComando(botao.getText());
-				
+
 		}
 	}
 }
