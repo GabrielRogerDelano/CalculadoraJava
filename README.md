@@ -21,7 +21,7 @@ O projeto pode ser executado em **qualquer máquina** que possua o **JDK instala
 
 ## 🛠️ Tecnologias Utilizadas
 
-- Java (JDK 17+ ou 21 LTS)
+- Java (JDK 21 LTS)
 - Java Swing
 - Terminal (PowerShell, CMD, Linux ou macOS)
 
@@ -60,6 +60,11 @@ Windows (PowerShell)
 ```bash
 javac -d bin (Get-ChildItem -Recurse -Filter *.java | ForEach-Object { $_.FullName })
 ```
+Linux / macOS
+```bash
+javac -d bin $(find src -name "*.java")
+```
+
 
 ### 3️⃣ Criar o arquivo JAR executável
 ```bash
@@ -72,11 +77,11 @@ java -jar CalculadoraJava.jar
 ```
 
 
-
+![Image](https://github.com/user-attachments/assets/79594e59-3ccc-4325-a0bc-74056e0f8544)
 ---
 
 ## 📝 Licença
 
 Este projeto esta sobe a licença [MIT](./LICENSE).
 
-Feito por Gabriel Roger Delano👋🏽 [Entre em contato!]([https://br.linkedin.com/in/matheus-maia-alvarez-](https://www.linkedin.com/in/gabrielrogerdelano/))
+Feito por Gabriel Roger Delano👋🏽 <a href="https://www.linkedin.com/in/gabrielrogerdelano/"> Entre em contato!</a>
